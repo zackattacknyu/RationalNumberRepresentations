@@ -16,7 +16,7 @@ public class InputExpressionInstance {
 	 * These keys are used to reference the correct string
 	 * 		in the resource bundle. 
 	 */
-	private static final String VALID_INPUT_MESSAGE_KEY = "ValidInputStringMessage";
+	public static final String VALID_INPUT_MESSAGE_KEY = "ValidInputStringMessage";
 	private static final String EQUALS_SIGN_ERROR_MESSAGE_KEY = "EqualsSignErrorMessage";
 	private static final String VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY = "VariableNameInvalidErrorMessage";
 	private static final String EMPTY_STRING_ERROR_MESSAGE_KEY = "EmptyStringErrorMessage";
@@ -70,24 +70,24 @@ public class InputExpressionInstance {
 			
 		}
 		
-		
-		//TEST CODE
-		if(isValidExpression){
-			Fraction ourFrac = numberInputtedAsFraction.getTheNumber();
-			System.out.println();
-			System.out.println("Int Part: " + ourFrac.getIntegerPart());
-			System.out.println("Integer Part in Base " + outputBase + ": " + 
-					numberInputtedAsFraction.OutputInteger(new BigInteger(outputBase)));
-			System.out.println("Decimal Rep in Base " + outputBase + ":" +
-					numberInputtedAsFraction.OutputDecimal(new BigInteger(outputBase)));
-			System.out.println("Fraction Rep in Base " + outputBase + ":" +
-					numberInputtedAsFraction.OutputFraction(new BigInteger(outputBase)));
-			System.out.println("Numerator: " + ourFrac.getNumerator());
-			System.out.println("Denominator: " + ourFrac.getDenominator());
-		}
-		
 	}
 	
+	public String getIntegerPartOutputString(){
+		return numberInputtedAsFraction.OutputInteger(new BigInteger(outputBase));
+	}
+	
+	public String getFractionRepOutputString(){
+		return numberInputtedAsFraction.OutputFraction(new BigInteger(outputBase));
+	}
+	
+	public String getDecimalRepOutputString(){
+		return numberInputtedAsFraction.OutputDecimal(new BigInteger(outputBase));
+	}
+	
+	public NumberStringExpression getNumberInputtedAsFraction() {
+		return numberInputtedAsFraction;
+	}
+
 	private String validateNumberInputted() {
 		
 		for(NumberStringExpressionFormat format : NumberStringExpressionFormat.values()){

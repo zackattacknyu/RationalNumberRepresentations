@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 public class ResourceBundleHelper {
 	
 	
-	protected ResourceBundle userMessages;
+	protected ResourceBundle messagesToUser;
 	protected String[] missingResourceMessage;
 	
 	private static final String MISSING_RESOURCE_MESSAGE_LINE_1 = 
@@ -46,36 +46,44 @@ public class ResourceBundleHelper {
 		missingResourceMessage = getMissingResourceMessage(classToCheckForResourceBundleDefinition);
 		
 		try{
-			userMessages = ResourceBundle.getBundle(ResourceBundleLocation, currentLocale);
+			messagesToUser = ResourceBundle.getBundle(ResourceBundleLocation, currentLocale);
 		} catch(MissingResourceException e){
 			
 			/*if the resource was not imported or named properly, the bundle is set to null
 			 * and when the getMessage method is invoked, that method returns a generic
 			 * no resource defined error. 
 			 */
-			userMessages = null;
+			messagesToUser = null;
 			
 		}
 		
 	}
+	
+	public static String getCurrentKey(String key, int lineNumber){
+		return StringHelper.concatThreeStrings(key, keySuffix, Integer.valueOf(lineNumber).toString());
+	}
+	
+	/*
+	 * This method is for property resource bundles
+	 */
 	
 	public String[] getMessage(String messageKey){
 		ArrayList<String> theMessage = new ArrayList<String>();
 		int currentLineNumber = 1;
 		String currentKey = getCurrentKey(messageKey,1);
 		
-		if(userMessages == null){
+		if(messagesToUser == null){
 			return missingResourceMessage;
 		}
 		
 		//if the string is one line, there is no line number in the message key
-		if(userMessages.containsKey(messageKey)){
-			theMessage.add(userMessages.getString(messageKey));
+		if(messagesToUser.containsKey(messageKey)){
+			theMessage.add(messagesToUser.getString(messageKey));
 		}
-		else if (userMessages.containsKey(currentKey)){ //if the string is multiple lines
+		else if (messagesToUser.containsKey(currentKey)){ //if the string is multiple lines
 			
-			while(userMessages.containsKey(currentKey)){
-				theMessage.add(userMessages.getString(currentKey));
+			while(messagesToUser.containsKey(currentKey)){
+				theMessage.add(messagesToUser.getString(currentKey));
 				currentLineNumber++;
 				currentKey = getCurrentKey(messageKey,currentLineNumber);
 			}
@@ -96,8 +104,50 @@ public class ResourceBundleHelper {
 		return newArray;
 	}
 	
-	public static String getCurrentKey(String key, int lineNumber){
-		return StringHelper.concatThreeStrings(key, keySuffix, Integer.valueOf(lineNumber).toString());
+	/*
+	 * This method is for list resource bundles
+	 */
+	public Object[] getObject(String messageKey){
+		ArrayList<Object> theMessage = new ArrayList<Object>();
+		int currentLineNumber = 1;
+		String currentKey = getCurrentKey(messageKey,1);
+		
+		if(messagesToUser == null){
+			return missingResourceMessage;
+		}
+		
+		//if the string is one line, there is no line number in the message key
+		if(messagesToUser.containsKey(messageKey)){
+			theMessage.add(messagesToUser.getString(messageKey));
+		}
+		else if (messagesToUser.containsKey(currentKey)){ //if the string is multiple lines
+			
+			while(messagesToUser.containsKey(currentKey)){
+				theMessage.add(messagesToUser.getObject(currentKey));
+				currentLineNumber++;
+				currentKey = getCurrentKey(messageKey,currentLineNumber);
+			}
+			
+		}
+		else{ //if the key does not exist in the resource bundle
+			return null;
+		}
+		
+		return theMessage.toArray();
+	}
+	
+	public Object getSingleObject(String messageKey){	
+		if(messagesToUser == null){
+			return missingResourceMessage;
+		}
+		
+		//if the string is one line, there is no line number in the message key
+		if(messagesToUser.containsKey(messageKey)){
+			return messagesToUser.getString(messageKey);
+		}
+		else{ //if the key does not exist in the resource bundle
+			return null;
+		}
 	}
 	
 	
