@@ -2,7 +2,7 @@ package consoleImplementation;
 
 import java.util.Scanner;
 
-import coreAccessor.ConsoleInstance;
+import coreAccessor.ProgramInstance;
 
 public class ConsoleMain {
 
@@ -22,7 +22,7 @@ public class ConsoleMain {
 	 */
 	public static void main(String[] args){
 		
-		ConsoleInstance thisInstance = new ConsoleInstance();
+		ProgramInstance thisInstance = new ProgramInstance();
 		String input = "Start";
 		Scanner sc = new Scanner(System.in);
 		

@@ -1,8 +1,6 @@
 package coreObjects;
 
 
-import generalMethods.DataStructures;
-import generalMethods.NumberTheory;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -10,7 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import coreAccessor.InputHelper;
+import coreObjectsUtils.DataStructures;
+import coreObjectsUtils.NumberTheory;
 
 public class Fraction{
 	
@@ -511,6 +510,7 @@ public class Fraction{
 	 * @param base
 	 * @return Array of BigIntegers which are the denominators associated with the terminating and repeating part
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static BigInteger[] GetDenominators(BigInteger denominator, BigInteger base){
 		
 		BigInteger TermPartDenom = BigInteger.ONE;

@@ -2,15 +2,18 @@ package coreAccessor;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import coreObjects.*;
-public class ConsoleInstance {
+public class ProgramInstance {
 
 	
 	private Hashtable<String,Fraction> variables;
+	private UserMessagesHelper userMessages;
 	
-	public ConsoleInstance(){
+	public ProgramInstance(){
 		
 	}
 	
@@ -22,12 +25,15 @@ public class ConsoleInstance {
 	 * @return				output to display to user
 	 */
 	public String[] ResolveConsoleInput(String input){
-		InputExpressionParts expr = new InputExpressionParts(input);
-		String[] errorMessage = expr.getErrorMessage();
+		userMessages = new UserMessagesHelper(Locale.US);
+		InputExpressionInstance expr = new InputExpressionInstance(input);
+		String[] errorMessage = userMessages.getMessage(expr.getErrorMessageKey());
 		String[] returnMessage;
 		
 		ArrayList<String> info = new ArrayList<String>(10);
 		
+		ResourceBundle resultsBundle = ResourceBundle.getBundle("coreAccessor.ComputedResults");
+		info.add(resultsBundle.getObject("userInputPart").toString());
 		info.add("varName = " + expr.getVariableName());
 		info.add("FuncName = " + expr.getFunctionName());
 		info.add("number = " + expr.getNumberInputted());

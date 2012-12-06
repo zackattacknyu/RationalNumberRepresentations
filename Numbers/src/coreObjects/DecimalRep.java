@@ -3,8 +3,6 @@ package coreObjects;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import coreAccessor.InputHelper;
-
 
 
 public class DecimalRep extends RationalNumberRep{

@@ -1,4 +1,4 @@
-package generalMethods;
+package coreObjectsUtils;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,6 +12,7 @@ public class DataStructures {
 	 * This works using the Set interface in Java since it won't add an element to a set
 	 *      if the element already exists in the set
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean isIntersectionEmpty(Set SetOne, Set SetTwo){
 		Set masterSet = new TreeSet();
 		
@@ -26,6 +27,7 @@ public class DataStructures {
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Set[] SplitSetbySet(Set SetToSplit, Set SetToSplitBy){
 		
 		/*this method splits the SetToSplit into two sets:

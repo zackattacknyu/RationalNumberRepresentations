@@ -15,6 +15,7 @@ public class RationalNumberRep {
 	public RationalNumberRep(BigInteger theBase) {
 		super();
 		this.theBase = theBase;
+		IntegerPartDigits = new ArrayList<BigInteger>(1);
 		IntegerPartDigits.add(BigInteger.ZERO);
 	}
 	public void setIntegerPartDigits(ArrayList<BigInteger> integerPartDigits) {

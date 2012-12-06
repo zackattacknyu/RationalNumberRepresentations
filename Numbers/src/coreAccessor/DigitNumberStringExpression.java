@@ -3,6 +3,9 @@ package coreAccessor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import coreAccessorUtils.Constants;
+import coreAccessorUtils.StringHelper;
+import coreAccessorUtils.IntegerHelper;
 import coreObjects.DecimalRep;
 import coreObjects.Fraction;
 import coreObjects.FractionRep;
@@ -49,31 +52,23 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 	
 	@Override
 	protected boolean splitNumberStringAndPreValidate() {
-				
-		Character decimal = '.';
-		char[] comma = {','};
-		char[] DecimalSeparators = {'.','_'};
-		char[] FractionSeparators = {'/',' '};
 		
 		String[] numberParts;
 		
 		//if decimal or fraction
-		if(masterInput.contains(decimal.toString())){
+		if(masterInput.matches(Constants.DECIMAL_EXPRESSION_PATTERN)){
 			
 			WhatNumberStringRepresents = 'D';
 			
 			//if decimal, split by decimal point and underscore
-			numberParts = InputHelper.ParseOutString(masterInput, comma, DecimalSeparators);
+			numberParts = StringHelper.takeOutCharsAndSplitString(
+					masterInput, Constants.DECIMAL_SEPARATOR_CLASS_REGEX, 
+					Constants.COMMA_IN_REGEX);
 			
 			//initial values for the different parts
 			integerPartDigitString = "0";
 			initialPartString = "";
 			repeatingPartString = "";
-			
-			//if not in this format, return false
-			if( (numberParts.length < 2)  || (numberParts.length > 3) ){
-				return false;
-			}
 			
 			//gets the integer part
 			if(numberParts.length > 0){
@@ -93,9 +88,11 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 			
 			
 		}
-		else{
+		else if(masterInput.matches(Constants.FRACTION_EXPRESSION_PATTERN)){
 			
-			numberParts = InputHelper.ParseOutString(masterInput, comma, FractionSeparators);
+			numberParts = StringHelper.takeOutCharsAndSplitString(
+					masterInput, Constants.FRACTION_SEPARATOR_CLASS_REGEX, 
+					Constants.COMMA_IN_REGEX);
 			
 			//it is a fraction unless shown to be an integer below
 			WhatNumberStringRepresents = 'F';
@@ -132,6 +129,20 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 			
 			
 		}
+		else if(masterInput.matches(Constants.ONE_OR_MORE_NUMBERS_PATTERN)){
+			
+			//it is a fraction unless shown to be an integer below
+			WhatNumberStringRepresents = 'F';
+			
+			//initial values for the different parts
+			integerPartDigitString = masterInput;
+			numeratorString = "0";
+			denominatorString = "1";
+			
+		}
+		else{
+			return false;
+		}
 		
 		return true;
 	}
@@ -154,7 +165,7 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 			if(currentNumber == null){
 				return null;
 			}
-			else if(InputHelper.isIntegerBetween(currentNumber, BigInteger.ZERO, inputBase.subtract(BigInteger.ONE))){
+			else if(IntegerHelper.isIntegerBetween(currentNumber, BigInteger.ZERO, inputBase.subtract(BigInteger.ONE))){
 				
 				compiledIntegerList.add(currentNumber);
 				
@@ -199,32 +210,80 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 		return true;
 	}
 
+	
 	@Override
 	protected String IntegerRepToString(RationalNumberRep theIntegerRep) {
-		// TODO Auto-generated method stub
-		return null;
+		return ArrayListOfDigitsToString(theIntegerRep.getIntegerPartDigits());
 	}
 
 	@Override
 	protected String DecimalRepToString(DecimalRep theDecimalRep) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder theDecimal = new StringBuilder();
+		
+		if(theNumber.getIntegerPart().compareTo(BigInteger.ZERO) > 0){
+			theDecimal.append(ArrayListOfDigitsToString(theDecimalRep.getIntegerPartDigits()));
+		}
+		else{
+			theDecimal.append(Constants.ZERO);
+		}
+		
+		if( (theDecimalRep.getTerminatingPartNumber().compareTo(BigInteger.ZERO) > 0) ||
+				(theDecimalRep.getRepeatingPartNumber().compareTo(BigInteger.ZERO) > 0) ){
+			theDecimal.append(Constants.DECIMAL_POINT);
+			
+			if(theDecimalRep.getTerminatingPartNumber().compareTo(BigInteger.ZERO) > 0){
+				theDecimal.append(ArrayListOfDigitsToString(theDecimalRep.getTerminatingPartDigits()));
+			}
+			if(theDecimalRep.getRepeatingPartNumber().compareTo(BigInteger.ZERO) > 0){
+				theDecimal.append(Constants.UNDERSCORE);
+				theDecimal.append(ArrayListOfDigitsToString(theDecimalRep.getRepeatingPartDigits()));
+			}
+			
+		}
+		
+		return theDecimal.toString();
 	}
 
 	@Override
 	protected String FractionRepToString(FractionRep theFractionRep) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder theFraction = new StringBuilder();
+		if(theNumber.getIntegerPart().compareTo(BigInteger.ZERO) > 0){
+			theFraction.append(ArrayListOfDigitsToString(theFractionRep.getIntegerPartDigits()));
+			theFraction.append(Constants.SPACE);
+		}
+		
+		if(theNumber.getNumerator().compareTo(BigInteger.ZERO) > 0){
+			theFraction.append(ArrayListOfDigitsToString(theFractionRep.getNumeratorDigits()));
+			theFraction.append(Constants.SLASH);
+			theFraction.append(ArrayListOfDigitsToString(theFractionRep.getDenominatorDigits()));
+		}
+		
+		if(theFraction.length() == 0){
+			theFraction.append(Constants.ZERO);
+		}
+		
+		return theFraction.toString();
 	}
 
 	@Override
 	protected boolean validateBase(BigInteger base) {
-		return InputHelper.isIntegerBetween(base, new BigInteger("2"), new BigInteger("36"));
+		return IntegerHelper.isIntegerBetween(base, new BigInteger("2"), new BigInteger("36"));
 	}
 
 	@Override
 	protected String OutputBaseOutOfRangeError() {
 		return "Output Base must be between 2 and 36 for Digit String Format";
+	}
+
+	@Override
+	protected String ArrayListOfDigitsToString(ArrayList<BigInteger> theDigits) {
+		StringBuilder integerRep = new StringBuilder(theDigits.size());
+		for(BigInteger digit : theDigits){
+			integerRep.append(NumberToChar(digit));
+		}
+		
+		//you need to reverse the order 
+		return integerRep.reverse().toString();
 	}
 
 

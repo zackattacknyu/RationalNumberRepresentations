@@ -263,7 +263,7 @@ public abstract class NumberStringExpression{
 	 * @param OutputBase		the output base
 	 * @return		the appropriate string given the format
 	 */
-	public String OutputDecimal(Fraction theFraction, BigInteger OutputBase){
+	public String OutputDecimal(BigInteger OutputBase){
 		
 		//returns error if output base is out of range for the format
 		if(!validateBase(OutputBase)){
@@ -278,6 +278,8 @@ public abstract class NumberStringExpression{
 		return DecimalRepToString(theNumber.GetDecimalRep(OutputBase));
 		
 	}
+	
+	protected abstract String ArrayListOfDigitsToString(ArrayList<BigInteger> theDigits);
 	
 	/**
 	 * Takes an integer rep object and makes the appropriate string

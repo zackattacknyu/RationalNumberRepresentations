@@ -3,7 +3,7 @@ package consoleImplementation;
 import java.math.*;
 
 import coreAccessor.DigitRepresentation;
-import coreAccessor.InputHelper;
+import coreAccessorUtils.IntegerHelper;
 
 public class consoleRun {
 	
@@ -48,7 +48,7 @@ public class consoleRun {
 	}
 	
 	public boolean isFormatValid(int input){
-		if( InputHelper.isIntegerBetween(BigInteger.valueOf(input), 
+		if( IntegerHelper.isIntegerBetween(BigInteger.valueOf(input), 
 				BigInteger.valueOf(1), BigInteger.valueOf(3)  )  
 				) 
 			return true;
@@ -57,7 +57,7 @@ public class consoleRun {
 	public boolean isBaseValid(BigInteger input, int format){
 		//restricted format, so must be less than what the digit representation can do
 		if(format == 1){
-			if(InputHelper.isIntegerBetween(input, BigInteger.valueOf(2), 
+			if(IntegerHelper.isIntegerBetween(input, BigInteger.valueOf(2), 
 					BigInteger.valueOf(RepImpl.getMaxBase()))){
 				return true;
 			}
@@ -66,7 +66,7 @@ public class consoleRun {
 			}
 		}
 		else{ //unrestricted format
-			if(InputHelper.isIntegerGreaterThan(input, BigInteger.valueOf(2))){
+			if(IntegerHelper.isIntegerGreaterThan(input, BigInteger.valueOf(2))){
 				return true;
 			}
 			else{

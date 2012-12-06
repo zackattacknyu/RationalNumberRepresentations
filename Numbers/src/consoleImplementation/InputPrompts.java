@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import coreAccessor.ConvertFromRepImpl;
 import coreAccessor.DigitRepresentation;
-import coreAccessor.InputHelper;
+import coreAccessorUtils.IntegerHelper;
 import coreObjects.Fraction;
 
 
@@ -62,20 +62,20 @@ public class InputPrompts {
 	}
 	
 	public static BigInteger getOnlyInteger(int format, DigitRepresentation theRep, 
-			BigInteger theBase, String setDelimiter){
+			BigInteger theBase, String setDelimiterRegex){
 		OutputPrompts.DisplayConsecutiveWhiteSpace(2);
 		System.out.println("Enter the integer you want converted");
 		OutputPrompts.DisplayConsecutiveWhiteSpace(1);
-		return getInputInteger(format, theRep, theBase, setDelimiter);
+		return getInputInteger(format, theRep, theBase, setDelimiterRegex);
 	}
 	
 	public static BigInteger getInputInteger(int format, DigitRepresentation theRep, 
-			BigInteger theBase, String setDelimiter){
+			BigInteger theBase, String setDelimiterRegex){
 		if(format == 1){
 			return getInputIntegerInDigitRepFormat(theRep,theBase);
 		}
 		else if(format == 2){
-			return getInputIntegerInSetFormat(theBase, setDelimiter);
+			return getInputIntegerInSetFormat(theBase, setDelimiterRegex);
 		}
 		else {
 			return getInputIntegerInNadicFormat(theBase);
@@ -120,7 +120,7 @@ public class InputPrompts {
 	 * @param theBase
 	 * @return	the big integer of what they put in
 	 */
-	public static BigInteger getInputIntegerInSetFormat(BigInteger theBase, String delimiter){
+	public static BigInteger getInputIntegerInSetFormat(BigInteger theBase, String regexToSplitBy){
 		BigInteger numSubs = getIntegerChoice("Enter the number of subscripts:",
 				BigInteger.ZERO,new BigInteger("2000000000"));
 		if(numSubs == null){
@@ -128,7 +128,7 @@ public class InputPrompts {
 		}
 		int numSubscripts = numSubs.intValue();
 				
-		return getIntegerFromSetRep(0, numSubscripts, theBase, delimiter);
+		return getIntegerFromSetRep(0, numSubscripts, theBase, regexToSplitBy);
 	}
 	
 	private static final String integerHelper = "Please enter an integer. Hit enter to go back.";
@@ -175,7 +175,7 @@ public class InputPrompts {
 			if(entry.isEmpty()){
 				break;
 			}
-			if(InputHelper.isIntegerBetween(entry,lowerBound,upperBound)){
+			if(IntegerHelper.isIntegerBetween(entry,lowerBound,upperBound)){
 				theResult = new BigInteger(entry);
 			}
 			else{
@@ -193,7 +193,7 @@ public class InputPrompts {
 	 * @param theBase			the base being used
 	 * @return		the resultant big integer
 	 */
-	public static BigInteger getIntegerFromSetRep(int startingValue, int endingValue, BigInteger theBase, String delimiter){
+	public static BigInteger getIntegerFromSetRep(int startingValue, int endingValue, BigInteger theBase, String regexToSplitBy){
 		Scanner result;
 		BigInteger theResult = null;
 		String entry = "1";
@@ -205,8 +205,8 @@ public class InputPrompts {
 			if(entry.isEmpty()){
 				break;
 			}
-			if(InputHelper.isIntegerSetString(entry, delimiter, theBase)){
-				theResult = ConvertFromRepImpl.ConvertToIntegerFromNumberString(entry, delimiter, theBase);
+			if(IntegerHelper.isIntegerSetString(entry, regexToSplitBy, theBase)){
+				theResult = ConvertFromRepImpl.ConvertToIntegerFromNumberString(entry, regexToSplitBy, theBase);
 			}
 			else{
 				System.out.println("String of subscripts invalid. Please re-enter or press enter to exit.");

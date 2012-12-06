@@ -1,4 +1,4 @@
-package generalMethods;
+package coreObjectsUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
