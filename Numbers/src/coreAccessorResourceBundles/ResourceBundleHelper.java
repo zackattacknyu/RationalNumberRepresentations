@@ -1,15 +1,19 @@
-package coreAccessorUtils;
+package coreAccessorResourceBundles;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import coreAccessorUtils.ArrayHelper;
+import coreAccessorUtils.StringHelper;
+
 public class ResourceBundleHelper {
 	
 	
 	protected ResourceBundle messagesToUser;
-	protected String[] missingResourceMessage;
+	protected ArrayList<String> missingResourceMessage;
+	protected ArrayList<Object> missingResourceMessageObject;
 	
 	private static final String MISSING_RESOURCE_MESSAGE_LINE_1 = 
 			"Error: Program could not find resource bundle." ; 
@@ -26,14 +30,15 @@ public class ResourceBundleHelper {
 	 */
 	private static final String keySuffix = "_line";
 	
-	public static final String[] getMissingResourceMessage(String classToCheck){
-		String[] newMessage = new String[3];
-		newMessage[0] = MISSING_RESOURCE_MESSAGE_LINE_1;
-		newMessage[1] = StringHelper.concatThreeStrings(MISSING_RESOURCE_MESSAGE_LINE_2_PIECE_1, 
-				classToCheck, MISSING_RESOURCE_MESSAGE_LINE_2_PIECE_3);
-		newMessage[2] = MISSING_RESOURCE_MESSAGE_LINE_3;
+	public static final ArrayList<Object> getMissingResourceMessage(String classToCheck){
+		ArrayList<Object> newMessage = new ArrayList<Object>(3);
+		newMessage.add(MISSING_RESOURCE_MESSAGE_LINE_1);
+		newMessage.add(StringHelper.concatThreeStrings(MISSING_RESOURCE_MESSAGE_LINE_2_PIECE_1, 
+				classToCheck, MISSING_RESOURCE_MESSAGE_LINE_2_PIECE_3));
+		newMessage.add(MISSING_RESOURCE_MESSAGE_LINE_3);
 		return newMessage;
 	}
+	
 	
 	public ResourceBundleHelper(String ResourceBundleLocation,
 			String classToCheckForResourceBundleDefinition){
@@ -43,7 +48,8 @@ public class ResourceBundleHelper {
 	public ResourceBundleHelper(Locale currentLocale, 
 			String ResourceBundleLocation, String classToCheckForResourceBundleDefinition){
 		
-		missingResourceMessage = getMissingResourceMessage(classToCheckForResourceBundleDefinition);
+		missingResourceMessageObject = getMissingResourceMessage(classToCheckForResourceBundleDefinition);
+		missingResourceMessage = ArrayHelper.toStringArrayList(missingResourceMessageObject);
 		
 		try{
 			messagesToUser = ResourceBundle.getBundle(ResourceBundleLocation, currentLocale);
@@ -67,7 +73,7 @@ public class ResourceBundleHelper {
 	 * This method is for property resource bundles
 	 */
 	
-	public String[] getMessage(String messageKey){
+	public ArrayList<String> getMessage(String messageKey){
 		ArrayList<String> theMessage = new ArrayList<String>();
 		int currentLineNumber = 1;
 		String currentKey = getCurrentKey(messageKey,1);
@@ -93,27 +99,19 @@ public class ResourceBundleHelper {
 			return null;
 		}
 		
-		return toStringArray(theMessage);
-	}
-	
-	public static String[] toStringArray(ArrayList<String> originalList){
-		String[] newArray = new String[originalList.size()];
-		for(int index = 0; index < originalList.size(); index++){
-			newArray[index] = originalList.get(index);
-		}
-		return newArray;
+		return theMessage;
 	}
 	
 	/*
 	 * This method is for list resource bundles
 	 */
-	public Object[] getObject(String messageKey){
+	public ArrayList<Object> getObject(String messageKey){
 		ArrayList<Object> theMessage = new ArrayList<Object>();
 		int currentLineNumber = 1;
 		String currentKey = getCurrentKey(messageKey,1);
 		
 		if(messagesToUser == null){
-			return missingResourceMessage;
+			return missingResourceMessageObject;
 		}
 		
 		//if the string is one line, there is no line number in the message key
@@ -133,7 +131,7 @@ public class ResourceBundleHelper {
 			return null;
 		}
 		
-		return theMessage.toArray();
+		return theMessage;
 	}
 	
 	public Object getSingleObject(String messageKey){	

@@ -84,6 +84,10 @@ public class InputExpressionInstance {
 		return numberInputtedAsFraction.OutputDecimal(new BigInteger(outputBase));
 	}
 	
+	public String getResultHeaderString(){
+		return numberInputtedAsFraction.OutputFraction(new BigInteger("10"));
+	}
+	
 	public NumberStringExpression getNumberInputtedAsFraction() {
 		return numberInputtedAsFraction;
 	}

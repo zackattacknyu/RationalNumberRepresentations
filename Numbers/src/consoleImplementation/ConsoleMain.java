@@ -1,5 +1,6 @@
 package consoleImplementation;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import coreAccessor.ProgramInstance;
@@ -65,9 +66,9 @@ public class ConsoleMain {
 	 * Displays an array of strings with each string being on a new line
 	 * @param toDisplay		the array of strings to display
 	 */
-	public static void DisplayLineSet(String[] toDisplay){
-		for(int j = 0; j < toDisplay.length; j++){
-			System.out.println(toDisplay[j]);
+	public static void DisplayLineSet(ArrayList<String> toDisplay){
+		for(String line:toDisplay){
+			System.out.println(line);
 		}
 	}
 }
