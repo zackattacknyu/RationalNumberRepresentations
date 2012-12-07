@@ -16,4 +16,5 @@ public class ResourceBundleConstants {
 	public static final String integerPartLabelKey = "integerPartLabel";
 	public static final String fractionRepLabelKey = "fractionRepLabel";
 	public static final String decimalRepLabelKey = "decimalRepLabel";
+	public static final String functionNameErrorKey = "functionNameError";
 }

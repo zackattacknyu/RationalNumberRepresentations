@@ -1,5 +1,6 @@
 package coreAccessorResourceBundles;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -18,6 +19,13 @@ public class ResultMessagesHelper extends ResourceBundleHelper {
 	public String getResultHeader(String numInBaseTenFraction){
 		return String.format(getSingleObject(ResourceBundleConstants.resultHeaderKey).toString(), 
 				numInBaseTenFraction);
+	}
+	
+	public ArrayList<String> getFunctionNameError(String functionName){
+		ArrayList<String> toReturn = new ArrayList<String>(1);
+		toReturn.add(String.format(getSingleObject(ResourceBundleConstants.functionNameErrorKey).toString()
+				, functionName));
+		return toReturn;
 	}
 	
 	private String getResultLine(String lineKey, String stringForBase, String resultString){

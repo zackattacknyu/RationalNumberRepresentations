@@ -13,6 +13,10 @@ public abstract class NumberStringExpression{
 	 * -----------------------------------------------------------
 	 */
 	
+	public void setTheNumber(Fraction theNumber) {
+		this.theNumber = theNumber;
+	}
+
 	protected String masterInput;
 	protected BigInteger inputBase;
 	

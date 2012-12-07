@@ -5,17 +5,15 @@ import java.util.Scanner;
 
 import coreAccessor.ProgramInstance;
 
+/**
+ * This class is for the Console User Interface. It calls into the core accessor which returns
+ * 		an array list of strings as the result. The program then prints those
+ * 		strings to the console. 
+ * 
+ * @author Zach DeStefano
+ *
+ */
 public class ConsoleMain {
-
-	private static final String[] Greetings = {
-		"Welcome to the Number Convertor", "", 
-		"This application converts rational numbers between fraction/decimal representation" ,
-		"and between different base representations",
-		"",
-		"",
-		"The application starts by converting from base 10 (decimal) to base 2 (binary)",
-		"The starting input format is normal digit representation and",
-		"the starting output format is normal digit representation"};
 	
 	/**
 	 * main method for console execution
@@ -48,17 +46,6 @@ public class ConsoleMain {
 		}
 		else{
 			return false;
-		}
-	}
-	
-	
-	/**
-	 * Displays blank lines
-	 * @param numLines		number of lines that are blank to display
-	 */
-	public static void DisplayConsecutiveWhiteSpace(int numLines){
-		for(int j = 0; j < numLines; j++){
-			System.out.println();
 		}
 	}
 	

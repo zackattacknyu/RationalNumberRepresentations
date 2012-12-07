@@ -40,6 +40,7 @@ public class InputExpressionInstance {
 	private String outputBase;
 	private String outputFormat;
 	private boolean isValidExpression;
+	private boolean numberInputtedIsVariable;
 	private NumberStringExpression numberInputtedAsFraction;
 	
 	public InputExpressionInstance(String input){
@@ -50,7 +51,7 @@ public class InputExpressionInstance {
 		outputFormat = Constants.defaultOutputFormat;
 		isValidExpression = true;
 		
-		for(int validator = 0; validator < 5; validator++){
+		for(int validator = 0; validator < 4; validator++){
 			
 			if(!isValidExpression) break;
 			
@@ -63,8 +64,6 @@ public class InputExpressionInstance {
 			case 2: errorMessageKey = validateBases(); break;
 			
 			case 3: errorMessageKey = validateFormat(); break;
-			
-			case 4: errorMessageKey = validateNumberInputted(); break;
 			
 			}
 			
@@ -92,8 +91,8 @@ public class InputExpressionInstance {
 		return numberInputtedAsFraction;
 	}
 
-	private String validateNumberInputted() {
-		
+	public void validateNumberInputtedInExpressionForm() {
+			
 		for(NumberStringExpressionFormat format : NumberStringExpressionFormat.values()){
 			numberInputtedAsFraction = NumberStringExpressionFormat.getExpressionObject
 					(format,numberInputted,new BigInteger(inputBase));
@@ -104,11 +103,11 @@ public class InputExpressionInstance {
 					
 					if(numberInputtedAsFraction.isValidInputArgs()){
 						isValidExpression = true;
-						return VALID_INPUT_MESSAGE_KEY;
+						errorMessageKey =VALID_INPUT_MESSAGE_KEY; return;
 					}
 					else{
 						isValidExpression = false;
-						return INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY;
+						errorMessageKey = INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY; return;
 					}
 					
 				}
@@ -117,7 +116,15 @@ public class InputExpressionInstance {
 		}
 		
 		isValidExpression = false;
-		return INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY;
+		errorMessageKey = INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY; return;
+	}
+	
+	public void setMessageKeyToVariableInvalid(){
+		errorMessageKey = VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY;
+	}
+	
+	public void setNumberInputtedFraction(Fraction newFraction){
+		numberInputtedAsFraction = new DigitNumberStringExpression(newFraction);
 	}
 
 	public String getVariableName() {
@@ -271,6 +278,8 @@ public class InputExpressionInstance {
 			if(inputParts.size() > 2){
 				outputFormat = inputParts.get(2);
 			}
+			
+			numberInputtedIsVariable = false;
 						
 		}
 		else if(functionInputs.matches(Constants.ONE_OR_MORE_NONQUOTES_PATTERN)){
@@ -282,6 +291,8 @@ public class InputExpressionInstance {
 				isValidExpression = false;
 				return INPUT_WITHOUT_QUOTES_INVALID_ERROR_MESSAGE_KEY;
 			}
+			
+			numberInputtedIsVariable = true;
 			
 			numberInputted = inputParts.get(0);
 			
@@ -307,6 +318,10 @@ public class InputExpressionInstance {
 	
 	
 
+
+	public boolean isNumberInputtedIsVariable() {
+		return numberInputtedIsVariable;
+	}
 
 	/**
 	 * This validates variable and function names. 
