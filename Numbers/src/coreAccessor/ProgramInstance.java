@@ -7,8 +7,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import coreAccessorResourceBundles.ResourceBundleConstants;
 import coreAccessorResourceBundles.ResultMessagesHelper;
 import coreAccessorResourceBundles.UserMessagesHelper;
+import coreAccessorUtils.Constants;
+import coreAccessorUtils.StringHelper;
 import coreObjects.*;
 public class ProgramInstance {
 
@@ -22,6 +25,8 @@ public class ProgramInstance {
 	public ProgramInstance(){
 		variables = new Hashtable<String,Fraction>(DefaultHashTableSize);
 		functions = new Hashtable<String,String>(DefaultHashTableSize);
+		
+		variables.put("PREVIOUS", Fraction.ZERO);
 		
 		functions.put("COMP", "InputExpression");
 		functions.put("COMPUTE", "InputExpression");
@@ -39,7 +44,21 @@ public class ProgramInstance {
 	public ArrayList<String> ResolveConsoleInput(String input){
 		userMessages = new UserMessagesHelper(Locale.US);
 		resultMessages = new ResultMessagesHelper(Locale.US);
-		InputExpressionInstance expr = new InputExpressionInstance(input);
+		char objectToUse = WhichInputExpressionObject(input);
+		InputExpressionInstance expr = new InputExpressionInstance(); 
+		
+		switch(objectToUse){
+		
+		case 'X': return userMessages.getMessage(
+				ResourceBundleConstants.INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY);
+		
+		case 'W': expr = new InputExpressionWithQuotes(input);
+				  break;
+		
+		case 'N': expr = new InputExpressionNoQuotes(input);
+				  break;
+		
+		}
 		String variableNameForFraction;
 		
 		String functionNameUsed = expr.getFunctionName().toUpperCase();
@@ -47,7 +66,7 @@ public class ProgramInstance {
 			return resultMessages.getFunctionNameError(functionNameUsed);
 		}
 		
-		if(expr.isNumberInputtedIsVariable()){
+		if(expr instanceof InputExpressionNoQuotes){
 			variableNameForFraction = expr.getNumberInputted();
 			if(variables.containsKey(variableNameForFraction)){
 				expr.setNumberInputtedFraction(variables.get(variableNameForFraction));
@@ -56,14 +75,11 @@ public class ProgramInstance {
 				expr.setMessageKeyToVariableInvalid();
 			}
 		}
-		else{
-			expr.validateNumberInputtedInExpressionForm();
-		}
 		
 		String messageKey = expr.getErrorMessageKey();
 		ArrayList<String> info = new ArrayList<String>(10);
 		
-		if(messageKey == InputExpressionInstance.VALID_INPUT_MESSAGE_KEY){
+		if(messageKey == ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY){
 			variables.put(expr.getVariableName(), expr.getNumberInputtedAsFraction().getTheNumber());
 			info.add("");
 			info.add(resultMessages.getResultHeader(expr.getResultHeaderString()));
@@ -82,6 +98,22 @@ public class ProgramInstance {
 			return userMessages.getMessage(expr.getErrorMessageKey());
 		}
 
+	}
+	
+	
+	private static char WhichInputExpressionObject(String input){
+		if(input.toUpperCase().matches(Constants.STRING_HAS_EXPRESSION_IN_QUOTES_PATTERN)){
+			return 'W'; //expression with quotes object	
+					
+		}
+		else if(input.toUpperCase().matches(Constants.ONE_OR_MORE_NONQUOTES_PATTERN)){
+			return 'N'; //expression without quotes object			
+			
+		}
+		else{
+			return 'X'; //invalid expression
+			
+		}
 	}
 	
 	

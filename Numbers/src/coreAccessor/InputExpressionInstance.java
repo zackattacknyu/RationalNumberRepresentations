@@ -3,6 +3,7 @@ package coreAccessor;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import coreAccessorResourceBundles.ResourceBundleConstants;
 import coreAccessorUtils.Constants;
 import coreAccessorUtils.StringHelper;
 import coreAccessorUtils.IntegerHelper;
@@ -10,65 +11,64 @@ import coreObjects.Fraction;
 
 public class InputExpressionInstance {
 	
-	/*
-	 * The following are the keys behind the error messages
-	 * 		that could result after invoking this class.
-	 * These keys are used to reference the correct string
-	 * 		in the resource bundle. 
-	 */
-	public static final String VALID_INPUT_MESSAGE_KEY = "ValidInputStringMessage";
-	private static final String EQUALS_SIGN_ERROR_MESSAGE_KEY = "EqualsSignErrorMessage";
-	private static final String VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY = "VariableNameInvalidErrorMessage";
-	private static final String EMPTY_STRING_ERROR_MESSAGE_KEY = "EmptyStringErrorMessage";
-	private static final String FUNCTION_INVALID_ERROR_MESSAGE_KEY = "FunctionInvalidErrorMessage";
-	private static final String INPUT_WITH_QUOTES_INVALID_ERROR_MESSAGE_KEY = "InputWithQuotesInvalidErrorMessage";
-	private static final String INPUT_WITHOUT_QUOTES_INVALID_ERROR_MESSAGE_KEY = "InputWithoutQuotesInvalidErrorMessage";
-	private static final String NO_CLOSING_QUOTE_ERROR_MESSAGE_KEY = "NoClosingQuoteMessage";
-	private static final String INVALID_INPUT_BASE_ERROR_MESSAGE_KEY = "InvalidInputBaseErrorMessage";
-	private static final String INVALID_OUTPUT_BASE_ERROR_MESSAGE_KEY = "InvalidOutputBaseErrorMessage";
-	private static final String INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY = "InvalidNumberExpressionErrorMessage";
-	private static final String INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY = "InvalidInputArgumentsforExpressionFormatMessage";
-	private static final String INVALID_FORMAT_ERROR_MESSAGE_KEY = "InvalidFormatErrorMessage";
+	protected String wholeInputString;
+	protected String variableName;
+	protected String functionName;
+	protected String errorMessageKey;
+	protected String numberInputted;
+	protected String inputBase;
+	protected String outputBase;
+	protected String outputFormat;
+	protected String wholeFunctionString;
+	protected String functionInputsString;
+	protected boolean isValidExpression;
+	protected NumberStringExpression numberInputtedAsFraction;
 	
+	public InputExpressionInstance(){
+		
+		
+	}
 	
-	
-	private String variableName;
-	private String functionName;
-	private String errorMessageKey;
-	private String numberInputted;
-	private String inputBase;
-	private String outputBase;
-	private String outputFormat;
-	private boolean isValidExpression;
-	private boolean numberInputtedIsVariable;
-	private NumberStringExpression numberInputtedAsFraction;
-	
-	public InputExpressionInstance(String input){
+	protected void initialValidation(String input){
 		variableName = Constants.defaultVariableName;
 		functionName = Constants.defaultFunctionName;
 		inputBase = Constants.defaultInputBase;
 		outputBase = Constants.defaultOutputBase;
 		outputFormat = Constants.defaultOutputFormat;
+		wholeInputString = input;
 		isValidExpression = true;
 		
-		for(int validator = 0; validator < 4; validator++){
+		for(int validator = 0; validator < 2; validator++){
 			
 			if(!isValidExpression) break;
 			
 			switch(validator){
 			
-			case 0: errorMessageKey = splitStringAndPreValidate(input); break;
+			case 0: errorMessageKey = splitIntoVariableAndFunction(); break;
 			
-			case 1: errorMessageKey = validateNames(); break;
-			
-			case 2: errorMessageKey = validateBases(); break;
-			
-			case 3: errorMessageKey = validateFormat(); break;
+			case 1: errorMessageKey = splitIntoFunctionNameAndFunctionInputs(); break;
 			
 			}
 			
 		}
-		
+	}
+	
+	protected void laterValidation(){
+		for(int validator = 0; validator < 3; validator++){
+			
+			if(!isValidExpression) break;
+			
+			switch(validator){
+			
+			case 0: errorMessageKey = validateNames(); break;
+			
+			case 1: errorMessageKey = validateBases(); break;
+			
+			case 2: errorMessageKey = validateFormat(); break;
+			
+			}
+			
+		}
 	}
 	
 	public String getIntegerPartOutputString(){
@@ -103,11 +103,11 @@ public class InputExpressionInstance {
 					
 					if(numberInputtedAsFraction.isValidInputArgs()){
 						isValidExpression = true;
-						errorMessageKey =VALID_INPUT_MESSAGE_KEY; return;
+						errorMessageKey =ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY; return;
 					}
 					else{
 						isValidExpression = false;
-						errorMessageKey = INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY; return;
+						errorMessageKey = ResourceBundleConstants.INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY; return;
 					}
 					
 				}
@@ -116,11 +116,11 @@ public class InputExpressionInstance {
 		}
 		
 		isValidExpression = false;
-		errorMessageKey = INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY; return;
+		errorMessageKey = ResourceBundleConstants.INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY; return;
 	}
 	
 	public void setMessageKeyToVariableInvalid(){
-		errorMessageKey = VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY;
+		errorMessageKey = ResourceBundleConstants.VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY;
 	}
 	
 	public void setNumberInputtedFraction(Fraction newFraction){
@@ -141,11 +141,11 @@ public class InputExpressionInstance {
 	
 	private String validateFormat(){
 		if(validFormat(outputFormat)){
-			return VALID_INPUT_MESSAGE_KEY;
+			return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 		}
 		else{
 			isValidExpression = false;
-			return INVALID_FORMAT_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.INVALID_FORMAT_ERROR_MESSAGE_KEY;
 		}
 	}
 	
@@ -153,34 +153,34 @@ public class InputExpressionInstance {
 		/*
 		 * This validates the variable entered. 
 		 */
-		if(!validVariableFunctionName(variableName)){
+		if(!StringHelper.validVariableFunctionName(variableName)){
 			isValidExpression = false;
-			return VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.VARIABLE_NAME_INVALID_ERROR_MESSAGE_KEY;
 		}
 		
-		if(!validVariableFunctionName(functionName)){
+		if(!StringHelper.validVariableFunctionName(functionName)){
 			isValidExpression = false;
-			return FUNCTION_INVALID_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.FUNCTION_INVALID_ERROR_MESSAGE_KEY;
 		}
 		
-		return VALID_INPUT_MESSAGE_KEY;
+		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 	}
 	
 	private String validateBases(){
 		if(!validBase(inputBase)){
 			isValidExpression = false;
-			return INVALID_INPUT_BASE_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.INVALID_INPUT_BASE_ERROR_MESSAGE_KEY;
 		}
 		if(!validBase(outputBase)){
 			isValidExpression = false;
-			return INVALID_OUTPUT_BASE_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.INVALID_OUTPUT_BASE_ERROR_MESSAGE_KEY;
 		}
 		
-		return VALID_INPUT_MESSAGE_KEY;
+		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 	}
 	
 	private boolean validBase(String base){
-		if(validVariableFunctionName(base)){
+		if(StringHelper.validVariableFunctionName(base)){
 			return true;
 		}
 		else if(IntegerHelper.isInteger(base)){
@@ -198,153 +198,54 @@ public class InputExpressionInstance {
 		 */
 		return true;
 	}
-
-	private String splitStringAndPreValidate(String input){
-		String function = "";
+	
+	private String splitIntoVariableAndFunction(){
 		String[] expressionParts;
-		String[] functionParts;
-		ArrayList<String> inputParts;
-		String functionInputs = "";
-		
-		//makes sure string is non-null
-		if(input.isEmpty()){
-			isValidExpression = false;
-			return EMPTY_STRING_ERROR_MESSAGE_KEY;
-		}
 		
 		/*
 		 * This function takes in the input and splits it by the equals sign
 		 * 		into the variable name and the function
 		 */
-		expressionParts = input.split(Constants.EQUALS_SIGN_IN_REGEX);
+		expressionParts = wholeInputString.split(Constants.EQUALS_SIGN_IN_REGEX);
 		if(expressionParts.length > 2){
 			isValidExpression = false;
-			return EQUALS_SIGN_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.EQUALS_SIGN_ERROR_MESSAGE_KEY;
 		}
 		else if(expressionParts.length == 2){
-			variableName = expressionParts[0]; function = expressionParts[1];
+			variableName = expressionParts[0]; wholeFunctionString = expressionParts[1];
 		}
 		else if(expressionParts.length == 1){
-			function = expressionParts[0];
+			wholeFunctionString = expressionParts[0];
 		}
 		else{
 			isValidExpression = false;
-			return EMPTY_STRING_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.EMPTY_STRING_ERROR_MESSAGE_KEY;
 		}
+		
+		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
+	}
+	
+	private String splitIntoFunctionNameAndFunctionInputs(){
+		String[] functionParts;
 		
 		/*
 		 * This splits up the function part into function name and inputs
 		 * It first makes the function into a splittable form by leaving out the close parenthesis
 		 * 		and converting the open parenthesis into a colon
 		 */
-		functionParts = StringHelper.takeOutCharsAndSplitString(function, 
+		functionParts = StringHelper.takeOutCharsAndSplitString(wholeFunctionString, 
 				Constants.OPEN_PARENTHESIS_IN_REGEX,
 				Constants.CLOSE_PARENTESIS_IN_REGEX);
 		if(functionParts.length != 2){
 			isValidExpression = false;
-			return FUNCTION_INVALID_ERROR_MESSAGE_KEY;
+			return ResourceBundleConstants.FUNCTION_INVALID_ERROR_MESSAGE_KEY;
 		}
 		functionName = functionParts[0];
-		functionInputs = functionParts[1];
+		functionInputsString = functionParts[1];
 		
-		
-		/*
-		 * This splits up the function Inputs into their appropriate strings
-		 */
-		if(functionInputs.matches(Constants.STRING_HAS_EXPRESSION_IN_QUOTES_PATTERN)){
-			
-			//splits the function parts by quotes
-			String[] functionInputParts = functionInputs.split(Constants.QUOTES_IN_REGEX);
-			
-			//the number inputted
-			numberInputted = functionInputParts[1];
-			
-			//if no input parameters were specified
-			if(functionInputParts.length < 3){ 
-				return VALID_INPUT_MESSAGE_KEY;
-			}
-			
-			inputParts = StringHelper.splitStringIntoNonemptyParts(
-					functionInputParts[2],Constants.COMMA_IN_REGEX);
-			
-			if( inputParts.size() > 3 ){
-				isValidExpression = false;
-				return INPUT_WITH_QUOTES_INVALID_ERROR_MESSAGE_KEY;
-			}
-			inputBase = inputParts.get(0);
-			if(inputParts.size() > 1){
-				outputBase = inputParts.get(1);
-			}
-			if(inputParts.size() > 2){
-				outputFormat = inputParts.get(2);
-			}
-			
-			numberInputtedIsVariable = false;
-						
-		}
-		else if(functionInputs.matches(Constants.ONE_OR_MORE_NONQUOTES_PATTERN)){
-			
-			inputParts = StringHelper.splitStringIntoNonemptyParts(
-					functionInputs,Constants.COMMA_IN_REGEX);
-			
-			if((inputParts.size() < 1) || (inputParts.size() > 3)){
-				isValidExpression = false;
-				return INPUT_WITHOUT_QUOTES_INVALID_ERROR_MESSAGE_KEY;
-			}
-			
-			numberInputtedIsVariable = true;
-			
-			numberInputted = inputParts.get(0);
-			
-			if(inputParts.size() > 1){
-				outputBase = inputParts.get(1);
-			}
-			if(inputParts.size() > 2){
-				outputFormat = inputParts.get(2);
-			}
-			
-			
-		}
-		else{
-			
-			isValidExpression = false;
-			return NO_CLOSING_QUOTE_ERROR_MESSAGE_KEY;
-			
-		}
-		
-		return VALID_INPUT_MESSAGE_KEY;
-
-	}
-	
-	
-
-
-	public boolean isNumberInputtedIsVariable() {
-		return numberInputtedIsVariable;
+		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 	}
 
-	/**
-	 * This validates variable and function names. 
-	 * They must start with a letter and only be letters and numbers
-	 * This is meant to follow standard programming practice
-	 * @param variable		the variable or function name
-	 * @return		whether it follows standard syntax
-	 */
-	public static boolean validVariableFunctionName(String variable){
-		
-		//if variable is null, make it valid by default
-		if(variable.isEmpty()){
-			return true;
-		}
-		
-		//does it match one letter, then letters and numbers format
-		if(variable.toUpperCase().matches(Constants.VARIABLE_NAME_PATTERN)){
-			return true;
-		}
-		
-		return false;
-		
-	}
 	
 	public boolean isValidExpression() {
 		return isValidExpression;

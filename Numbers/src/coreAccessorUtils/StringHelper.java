@@ -58,5 +58,28 @@ public class StringHelper {
 		return String.format(Constants.CONCAT_FIVE_STRINGS_FORMATTED_STRING, string1, string2, string3,
 				string4, string5);
 	}
+	
+	/**
+	 * This validates variable and function names. 
+	 * They must start with a letter and only be letters and numbers
+	 * This is meant to follow standard programming practice
+	 * @param variable		the variable or function name
+	 * @return		whether it follows standard syntax
+	 */
+	public static boolean validVariableFunctionName(String variable){
+		
+		//if variable is null, make it valid by default
+		if(variable.isEmpty()){
+			return true;
+		}
+		
+		//does it match one letter, then letters and numbers format
+		if(variable.toUpperCase().matches(Constants.VARIABLE_NAME_PATTERN)){
+			return true;
+		}
+		
+		return false;
+		
+	}
 
 }
