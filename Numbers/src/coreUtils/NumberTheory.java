@@ -1,4 +1,4 @@
-package coreObjectsUtils;
+package coreUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -1,15 +1,16 @@
-package coreAccessor;
+package ioMethods;
+
+import ioUtils.Constants;
+import ioUtils.IntegerHelper;
+import ioUtils.StringHelper;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import coreAccessorUtils.Constants;
-import coreAccessorUtils.StringHelper;
-import coreAccessorUtils.IntegerHelper;
-import coreObjects.DecimalRep;
-import coreObjects.Fraction;
-import coreObjects.FractionRep;
-import coreObjects.RationalNumberRep;
+import core.DecimalRep;
+import core.Fraction;
+import core.FractionRep;
+import core.RationalNumberRep;
 
 public class DigitNumberStringExpression extends NumberStringExpression {
 
@@ -129,7 +130,7 @@ public class DigitNumberStringExpression extends NumberStringExpression {
 			
 			
 		}
-		else if(masterInput.matches(Constants.ONE_OR_MORE_NUMBERS_PATTERN)){
+		else if(masterInput.matches(Constants.INTEGER_EXPRESSION_PATTERN)){
 			
 			//it is a fraction unless shown to be an integer below
 			WhatNumberStringRepresents = 'F';

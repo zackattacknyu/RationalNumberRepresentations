@@ -1,13 +1,12 @@
-package coreAccessor;
+package ioMethods;
+
+import ioResourceBundles.ResourceBundleConstants;
+import ioUtils.Constants;
+import ioUtils.StringHelper;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 
-import coreAccessorResourceBundles.ResourceBundleConstants;
-import coreAccessorUtils.Constants;
-import coreAccessorUtils.StringHelper;
-import coreAccessorUtils.IntegerHelper;
-import coreObjects.Fraction;
+import core.Fraction;
 
 public class InputExpressionInstance {
 	
@@ -16,8 +15,17 @@ public class InputExpressionInstance {
 	protected String functionName;
 	protected String errorMessageKey;
 	protected String numberInputted;
-	protected String inputBase;
-	protected String outputBase;
+	
+	protected String inputBaseString;
+	protected SpecifiedBase inputBase;
+	
+	public SpecifiedBase getOutputBase() {
+		return outputBase;
+	}
+
+	protected SpecifiedBase outputBase;
+	protected String outputBaseString;
+
 	protected String outputFormat;
 	protected String wholeFunctionString;
 	protected String functionInputsString;
@@ -32,8 +40,8 @@ public class InputExpressionInstance {
 	protected void initialValidation(String input){
 		variableName = Constants.defaultVariableName;
 		functionName = Constants.defaultFunctionName;
-		inputBase = Constants.defaultInputBase;
-		outputBase = Constants.defaultOutputBase;
+		inputBaseString = Constants.defaultInputBase;
+		outputBaseString = Constants.defaultOutputBase;
 		outputFormat = Constants.defaultOutputFormat;
 		wholeInputString = input;
 		isValidExpression = true;
@@ -53,8 +61,15 @@ public class InputExpressionInstance {
 		}
 	}
 	
-	protected void laterValidation(){
-		for(int validator = 0; validator < 3; validator++){
+	public void doLaterValidation(){
+		if(isValidExpression){
+			laterValidation();
+		}
+	}
+	
+	public void laterValidation(){
+		
+		for(int validator = 0; validator < 2; validator++){
 			
 			if(!isValidExpression) break;
 			
@@ -62,9 +77,7 @@ public class InputExpressionInstance {
 			
 			case 0: errorMessageKey = validateNames(); break;
 			
-			case 1: errorMessageKey = validateBases(); break;
-			
-			case 2: errorMessageKey = validateFormat(); break;
+			case 1: errorMessageKey = validateFormat(); break;
 			
 			}
 			
@@ -72,15 +85,15 @@ public class InputExpressionInstance {
 	}
 	
 	public String getIntegerPartOutputString(){
-		return numberInputtedAsFraction.OutputInteger(new BigInteger(outputBase));
+		return numberInputtedAsFraction.OutputInteger(outputBase.getBaseAsInteger());
 	}
 	
 	public String getFractionRepOutputString(){
-		return numberInputtedAsFraction.OutputFraction(new BigInteger(outputBase));
+		return numberInputtedAsFraction.OutputFraction(outputBase.getBaseAsInteger());
 	}
 	
 	public String getDecimalRepOutputString(){
-		return numberInputtedAsFraction.OutputDecimal(new BigInteger(outputBase));
+		return numberInputtedAsFraction.OutputDecimal(outputBase.getBaseAsInteger());
 	}
 	
 	public String getResultHeaderString(){
@@ -89,34 +102,6 @@ public class InputExpressionInstance {
 	
 	public NumberStringExpression getNumberInputtedAsFraction() {
 		return numberInputtedAsFraction;
-	}
-
-	public void validateNumberInputtedInExpressionForm() {
-			
-		for(NumberStringExpressionFormat format : NumberStringExpressionFormat.values()){
-			numberInputtedAsFraction = NumberStringExpressionFormat.getExpressionObject
-					(format,numberInputted,new BigInteger(inputBase));
-			
-			//sees if the input matches the format
-			if(numberInputtedAsFraction != null){
-				if(numberInputtedAsFraction.isStringInThisFormat()){
-					
-					if(numberInputtedAsFraction.isValidInputArgs()){
-						isValidExpression = true;
-						errorMessageKey =ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY; return;
-					}
-					else{
-						isValidExpression = false;
-						errorMessageKey = ResourceBundleConstants.INVALID_INPUT_ARGS_ERROR_MESSAGE_KEY; return;
-					}
-					
-				}
-			}
-			
-		}
-		
-		isValidExpression = false;
-		errorMessageKey = ResourceBundleConstants.INVALID_NUMBER_EXPRESSION_ERROR_MESSAGE_KEY; return;
 	}
 	
 	public void setMessageKeyToVariableInvalid(){
@@ -166,12 +151,17 @@ public class InputExpressionInstance {
 		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 	}
 	
-	private String validateBases(){
-		if(!validBase(inputBase)){
+	protected String validateBases(){
+		
+		inputBase = new SpecifiedBase(inputBaseString);
+		if(!inputBase.isBaseValid()){
 			isValidExpression = false;
 			return ResourceBundleConstants.INVALID_INPUT_BASE_ERROR_MESSAGE_KEY;
 		}
-		if(!validBase(outputBase)){
+		
+		outputBase = new SpecifiedBase(outputBaseString);
+		
+		if(!outputBase.isBaseValid()){
 			isValidExpression = false;
 			return ResourceBundleConstants.INVALID_OUTPUT_BASE_ERROR_MESSAGE_KEY;
 		}
@@ -179,17 +169,6 @@ public class InputExpressionInstance {
 		return ResourceBundleConstants.VALID_INPUT_MESSAGE_KEY;
 	}
 	
-	private boolean validBase(String base){
-		if(StringHelper.validVariableFunctionName(base)){
-			return true;
-		}
-		else if(IntegerHelper.isInteger(base)){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 	
 	private boolean validFormat(String format){
 		
@@ -255,12 +234,17 @@ public class InputExpressionInstance {
 		return numberInputted;
 	}
 
-	public String getInputBase() {
+	public String getInputBaseString() {
+		return inputBaseString;
+	}
+
+
+	public SpecifiedBase getInputBase() {
 		return inputBase;
 	}
 
-	public String getOutputBase() {
-		return outputBase;
+	public String getOutputBaseString() {
+		return outputBaseString;
 	}
 
 	public String getOutputFormat() {

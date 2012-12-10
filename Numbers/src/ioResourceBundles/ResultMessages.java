@@ -1,4 +1,4 @@
-package coreAccessorResourceBundles;
+package ioResourceBundles;
 
 import java.math.BigInteger;
 import java.util.ListResourceBundle;

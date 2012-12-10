@@ -1,4 +1,4 @@
-package coreAccessorResourceBundles;
+package ioResourceBundles;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -45,5 +45,19 @@ public class ResultMessagesHelper extends ResourceBundleHelper {
 	public String getDecimalRepResult(String stringForBase, String resultString){
 		return getResultLine(ResourceBundleConstants.decimalRepLabelKey,
 				stringForBase,resultString);
+	}
+	
+	public static ArrayList<String> getFullResultMessage(String resultHeader, 
+			String integerResult, String fractionResult, String decimalResult){
+		ArrayList<String> mesage = new ArrayList<String>(10);
+		mesage.add("");
+		mesage.add(resultHeader);
+		mesage.add("");
+		mesage.add(integerResult);
+		mesage.add(fractionResult);
+		mesage.add(decimalResult);
+		mesage.add("");
+		mesage.add("");
+		return mesage;
 	}
 }

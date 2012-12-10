@@ -1,9 +1,9 @@
-package coreAccessor;
+package ioMethods;
 
 import java.math.*;
 import java.util.ArrayList;
 
-import coreObjects.*;
+import core.*;
 
 public abstract class NumberStringExpression{
 	

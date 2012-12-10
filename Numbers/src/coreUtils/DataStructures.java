@@ -1,4 +1,4 @@
-package coreObjectsUtils;
+package coreUtils;
 
 import java.util.Set;
 import java.util.TreeSet;

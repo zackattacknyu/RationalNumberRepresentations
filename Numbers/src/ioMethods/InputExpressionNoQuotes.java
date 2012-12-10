@@ -1,19 +1,34 @@
-package coreAccessor;
+package ioMethods;
+
+import ioResourceBundles.ResourceBundleConstants;
+import ioUtils.Constants;
+import ioUtils.StringHelper;
 
 import java.util.ArrayList;
 
-import coreAccessorResourceBundles.ResourceBundleConstants;
-import coreAccessorUtils.Constants;
-import coreAccessorUtils.StringHelper;
 
 public class InputExpressionNoQuotes extends InputExpressionInstance{
 
 	public InputExpressionNoQuotes(String input){
 		super();
 		initialValidation(input);
-		validateInputPartsString();
-		laterValidation();
+		
+		for(int validator = 0; validator < 2; validator++){
+			
+			if(!isValidExpression) break;
+			
+			switch(validator){
+			
+			case 0: errorMessageKey = validateInputPartsString(); break;
+			
+			case 1: errorMessageKey = validateBases(); break;
+			
+			}
+			
+		}
+		
 	}
+	
 
 	public String validateInputPartsString(){
 
@@ -29,7 +44,7 @@ public class InputExpressionNoQuotes extends InputExpressionInstance{
 		numberInputted = inputParts.get(0);
 		
 		if(inputParts.size() > 1){
-			outputBase = inputParts.get(1);
+			outputBaseString = inputParts.get(1);
 		}
 		if(inputParts.size() > 2){
 			outputFormat = inputParts.get(2);

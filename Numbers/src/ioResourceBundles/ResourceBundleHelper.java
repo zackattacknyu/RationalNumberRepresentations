@@ -1,12 +1,13 @@
-package coreAccessorResourceBundles;
+package ioResourceBundles;
+
+import ioUtils.ArrayHelper;
+import ioUtils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import coreAccessorUtils.ArrayHelper;
-import coreAccessorUtils.StringHelper;
 
 public class ResourceBundleHelper {
 	

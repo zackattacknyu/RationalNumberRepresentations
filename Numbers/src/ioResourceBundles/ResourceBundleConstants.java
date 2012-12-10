@@ -1,22 +1,25 @@
-package coreAccessorResourceBundles;
+package ioResourceBundles;
 
 public class ResourceBundleConstants {
 
 	public static final String UserMessages_ResourceBundleLocation = 
-			"coreAccessorResourceBundles.UserMessages";
+			"ioResourceBundles.UserMessages";
 	public static final String UserMessages_classToCheck = 
-			"coreAccessorResourceBundles.UserMessagesHelper";
+			"ioResourceBundles.UserMessagesHelper";
 	
 	public static final String ResultMessages_ResourceBundleLocation = 
-			"coreAccessorResourceBundles.ResultMessages";
+			"ioResourceBundles.ResultMessages";
 	public static final String ResultMessages_classToCheck = 
-			"coreAccessorResourceBundles.ResultMessagesHelper";
+			"ioResourceBundles.ResultMessagesHelper";
 	
 	public static final String resultHeaderKey = "resultHeader";
 	public static final String integerPartLabelKey = "integerPartLabel";
 	public static final String fractionRepLabelKey = "fractionRepLabel";
 	public static final String decimalRepLabelKey = "decimalRepLabel";
 	public static final String functionNameErrorKey = "functionNameError";
+	
+	public static final String helpTextKey = "HelpTextMessage";
+	public static final String variableListHeaderKey = "VariableListHeader";
 	
 	/*
 	 * The following are the keys behind the error messages

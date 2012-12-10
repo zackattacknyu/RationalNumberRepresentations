@@ -1,4 +1,4 @@
-package coreObjects;
+package core;
 
 
 
@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import coreObjectsUtils.DataStructures;
-import coreObjectsUtils.NumberTheory;
+import coreUtils.DataStructures;
+import coreUtils.NumberTheory;
 
 public class Fraction{
 	

@@ -1,29 +1,47 @@
-package coreAccessor;
+package ioMethods;
+
+import ioResourceBundles.ResourceBundleConstants;
+import ioUtils.Constants;
+import ioUtils.StringHelper;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import coreAccessorResourceBundles.ResourceBundleConstants;
-import coreAccessorUtils.Constants;
-import coreAccessorUtils.StringHelper;
 
 public class InputExpressionWithQuotes extends InputExpressionInstance{
-
-	private String inputBase;
 	
 	public InputExpressionWithQuotes(String input){
 		super();
 		initialValidation(input);
-		validateInputPartsString();
-		validateNumberInputtedInExpressionForm();
-		laterValidation();
+		
+		for(int validator = 0; validator < 2; validator++){
+			
+			if(!isValidExpression) break;
+			
+			switch(validator){
+			
+			case 0: errorMessageKey = validateInputPartsString(); break;
+			
+			case 1: errorMessageKey = validateBases(); break;
+			
+			}
+		}
+		
+		
+	}
+	
+	public void doLaterValidation(){
+		if(isValidExpression){
+			validateNumberInputtedInExpressionForm();
+			laterValidation();
+		}
 	}
 
 	public void validateNumberInputtedInExpressionForm() {
 			
 		for(NumberStringExpressionFormat format : NumberStringExpressionFormat.values()){
 			numberInputtedAsFraction = NumberStringExpressionFormat.getExpressionObject
-					(format,numberInputted,new BigInteger(inputBase));
+					(format,numberInputted, inputBase.getBaseAsInteger());
 			
 			//sees if the input matches the format
 			if(numberInputtedAsFraction != null){
@@ -70,9 +88,9 @@ public class InputExpressionWithQuotes extends InputExpressionInstance{
 			isValidExpression = false;
 			return ResourceBundleConstants.INPUT_WITH_QUOTES_INVALID_ERROR_MESSAGE_KEY;
 		}
-		inputBase = inputParts.get(0);
+		inputBaseString = inputParts.get(0);
 		if(inputParts.size() > 1){
-			outputBase = inputParts.get(1);
+			outputBaseString = inputParts.get(1);
 		}
 		if(inputParts.size() > 2){
 			outputFormat = inputParts.get(2);

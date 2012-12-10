@@ -1,4 +1,4 @@
-package coreAccessorResourceBundles;
+package ioResourceBundles;
 
 import java.util.Locale;
 

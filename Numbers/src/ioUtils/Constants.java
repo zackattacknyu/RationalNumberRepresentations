@@ -1,4 +1,4 @@
-package coreAccessorUtils;
+package ioUtils;
 
 /**
  * This class is meant to hold regular expressions for use 
@@ -30,8 +30,9 @@ public class Constants {
 	public static final String VARIABLE_NAME_PATTERN = "[A-Z]{1}[\\w]*";
 	public static final String ONE_OR_MORE_NUMBERS_PATTERN = "[0-9]+";
 	public static final String ONE_OR_MORE_NONQUOTES_PATTERN = "[^\\x22]+";
-	public static final String DECIMAL_EXPRESSION_PATTERN = "[0-9]*[.]{1}[0-9]*[_]{0,1}[0-9]*";
-	public static final String FRACTION_EXPRESSION_PATTERN = "[0-9]*[ ]*[0-9]+[/]{1}[0-9]+";
+	public static final String INTEGER_EXPRESSION_PATTERN = "[0-9a-zA-Z]+";
+	public static final String DECIMAL_EXPRESSION_PATTERN = "[0-9a-zA-Z]*[.]{1}[0-9a-zA-Z]*[_]{0,1}[0-9a-zA-Z]*";
+	public static final String FRACTION_EXPRESSION_PATTERN = "[0-9a-zA-Z]*[ ]*[0-9a-zA-Z]+[/]{1}[0-9a-zA-Z]+";
 	public static final String STRING_HAS_EXPRESSION_IN_QUOTES_PATTERN = 
 			"[^\\x22]*[\\x22]{1}[^\\x22]+[\\x22]{1}[^\\x22]*";
 	

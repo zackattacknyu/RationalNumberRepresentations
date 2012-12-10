@@ -1,9 +1,10 @@
 package consoleImplementation;
 
+import ioMethods.ProgramInstance;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import coreAccessor.ProgramInstance;
 
 /**
  * This class is for the Console User Interface. It calls into the core accessor which returns
