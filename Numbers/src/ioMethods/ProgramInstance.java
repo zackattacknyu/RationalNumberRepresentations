@@ -33,7 +33,7 @@ public class ProgramInstance {
 		variables = new HashMap<String,Fraction>(DefaultHashTableSize);
 		functions = new HashMap<String,String>(DefaultHashTableSize);
 		
-		variables.put("PREVIOUS", Fraction.ZERO);
+		variables.put(Constants.defaultVariableName, Fraction.ZERO);
 		
 		functions.put("COMP", "InputExpression");
 		functions.put("COMPUTE", "InputExpression");
