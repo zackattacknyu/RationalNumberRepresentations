@@ -34,15 +34,7 @@ public class StringHelper {
 	}
 	
 	public static String takeOutChars(String input, String regexToIgnore){
-		StringBuilder inputStringWithoutChars = new StringBuilder(input.length());
-		String[] inputStringPartsToKeep = input.split(regexToIgnore);
-		
-		//takes out the unwanted characters
-		for(String inputStringPart: inputStringPartsToKeep){
-			inputStringWithoutChars.append(inputStringPart);
-		}
-		
-		return inputStringWithoutChars.toString();
+		return input.replaceAll(regexToIgnore, "");
 	}
 	
 	public static String concatTwoStrings(String string1, String string2){

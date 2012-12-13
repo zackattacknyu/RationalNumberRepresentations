@@ -20,6 +20,8 @@ public class Constants {
 	public static final String QUOTES_IN_REGEX = "\\x22";
 	public static final String COMMA_IN_REGEX = ",";
 	public static final String EQUALS_SIGN_IN_REGEX = "=";
+	public static final String SEMICOLON_IN_REGEX = ";";
+	public static final String COLON_IN_REGEX = ":";
 	public static final String DECIMAL_SEPARATOR_CLASS_REGEX = "[._]";
 	public static final String FRACTION_SEPARATOR_CLASS_REGEX = "[/ ]";
 	
@@ -49,8 +51,8 @@ public class Constants {
 	public static final String defaultInputBase = "10";
 	public static final String defaultOutputBase = "16";
 	public static final String defaultOutputFormat = "1";
-	public static final String defaultVariableName = "PREVIOUS";
-	public static final String defaultFunctionName = "<NONE>";
+	public static final String defaultVariableName = "ANS";
+	public static final String defaultFunctionName = "CALC";
 	
 	/*
 	 * Characters used in Strings

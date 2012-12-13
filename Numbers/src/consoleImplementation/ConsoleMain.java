@@ -1,5 +1,6 @@
 package consoleImplementation;
 
+import inputParser.PrelimParse;
 import ioMethods.ProgramInstance;
 
 import java.util.ArrayList;
@@ -29,7 +30,16 @@ public class ConsoleMain {
 		while(!isQuit(input)){
 			System.out.print("> ");
 			input = sc.nextLine();
-			DisplayLineSet(thisInstance.ResolveConsoleInput(input));
+			
+			//TEST CODE
+			PrelimParse theParse = new PrelimParse(input);
+			System.out.println("varName = " + theParse.getVariableName());
+			System.out.println("funcName = " + theParse.getFunctionName());
+			System.out.println("fractionInputted = " + theParse.getFractionInputted().getNumberInputted());
+			System.out.println("fractionInputtedInBase = " + theParse.getFractionInputted().getInputBase());
+			System.out.println("outputBaseSpecified = " + theParse.getOutputBase().getNumberInputted());
+			System.out.println("ouptutBaseSpecifiedInBase = " + theParse.getOutputBase().getInputBase());
+			System.out.println("outputFormat = " + theParse.getOutputFormat());
 		}
 	}
 	
