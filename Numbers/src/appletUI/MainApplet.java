@@ -1,5 +1,7 @@
 package appletUI;
 
+import ioMethods.StringHelper;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -66,7 +68,7 @@ public class MainApplet extends JFrame {
 		contentPane = new JPanel();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700	, 500);
+		setBounds(100, 100, 870	, 728);
 		setContentPane(contentPane);
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -75,9 +77,9 @@ public class MainApplet extends JFrame {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(119dlu;default)"),
+				ColumnSpec.decode("max(151dlu;default)"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(15dlu;default)"),
+				ColumnSpec.decode("max(31dlu;default)"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(31dlu;default)"),
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
@@ -116,12 +118,13 @@ public class MainApplet extends JFrame {
 		
 		JLabel lblOr = new JLabel("OR");
 		lblOr.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		contentPane.add(lblOr, "6, 4");
+		contentPane.add(lblOr, "6, 4, center, default");
 		
 		JLabel lblVariable = new JLabel("Variable:");
 		contentPane.add(lblVariable, "8, 4, right, default");
 		
 		variableNamesComboBox = new JComboBox();
+		variableNamesComboBox.setModel(new DefaultComboBoxModel(new String[] {"<NONE>"}));
 		variableNamesComboBox.setToolTipText("Available variables");
 		contentPane.add(variableNamesComboBox, "10, 4, fill, default");
 		JLabel lblInputBase = new JLabel("Input Base");
@@ -131,7 +134,7 @@ public class MainApplet extends JFrame {
 		txtInputBase.setColumns(10);
 		JLabel lblTo = new JLabel("to");
 		lblTo.setFont(new Font("Tahoma", Font.BOLD, 20));
-		contentPane.add(lblTo, "6, 10");
+		contentPane.add(lblTo, "6, 10, center, default");
 		contentPane.add(lblOutputBase, "2, 14, right, default");
 		txtOutputBase = new JTextField();
 		contentPane.add(txtOutputBase, "4, 14, 7, 1, fill, default");
@@ -151,17 +154,7 @@ public class MainApplet extends JFrame {
 		btnSaveToVariable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				String result = JOptionPane.showInputDialog("Specify Name of Variable");
-				int stringIndex = 0;
-				if((result != null) && (!result.isEmpty())){
-					String[] newComboBoxModel = new String[variableNamesComboBox.getModel().getSize()+1];
-					while(stringIndex < variableNamesComboBox.getModel().getSize()){
-						newComboBoxModel[stringIndex] = (String) variableNamesComboBox.getModel().getElementAt(stringIndex);
-						stringIndex++;
-					}
-					newComboBoxModel[stringIndex] = result;
-					variableNamesComboBox.setModel(new DefaultComboBoxModel(newComboBoxModel));
-				}
+				addVariable();
 				
 			}
 		});
@@ -177,6 +170,25 @@ public class MainApplet extends JFrame {
 		String textToAdd = txtNumber.getText() + " in base " + txtInputBase.getText() + " is \n" + result + " in base " + txtOutputBase.getText() + "\n\n";
 		textInLog = textToAdd + textInLog;
 		textArea.setText(textInLog);
+	}
+	
+	public void addVariable(){
+		String result = JOptionPane.showInputDialog("Specify Name of Variable");
+		int stringIndex = 0;
+		if((result != null) && (!result.isEmpty())){
+			if(StringHelper.validVariableFunctionName(result)){
+				String[] newComboBoxModel = new String[variableNamesComboBox.getModel().getSize()+1];
+				while(stringIndex < variableNamesComboBox.getModel().getSize()){
+					newComboBoxModel[stringIndex] = (String) variableNamesComboBox.getModel().getElementAt(stringIndex);
+					stringIndex++;
+				}
+				newComboBoxModel[stringIndex] = result;
+				variableNamesComboBox.setModel(new DefaultComboBoxModel(newComboBoxModel));
+			}
+			else{
+				JOptionPane.showMessageDialog(this,"Invalid Variable Name");
+			}
+		}
 	}
 
 }
