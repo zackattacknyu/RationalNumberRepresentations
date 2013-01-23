@@ -1,5 +1,7 @@
 package appletUI;
 
+import ioMethods.IntegerHelper;
+import ioMethods.ProgramInstance;
 import ioMethods.StringHelper;
 
 import java.awt.EventQueue;
@@ -22,6 +24,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.math.BigInteger;
 
 public class MainApplet extends JFrame {
 
@@ -37,6 +42,7 @@ public class MainApplet extends JFrame {
 	private JComboBox variableNamesComboBox;
 	private String textInLog = "";
 	private String result = "sample";
+	private ProgramInstance instance;
 
 	/**
 	 * Launch the application.
@@ -58,6 +64,8 @@ public class MainApplet extends JFrame {
 	 * Create the frame.
 	 */
 	public MainApplet() {
+		instance = new ProgramInstance();
+		
 		JLabel lblWelcomeToRational = new JLabel("Rational Number Representations");
 		lblWelcomeToRational.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		JLabel lblNumber = new JLabel("Number");
@@ -167,7 +175,19 @@ public class MainApplet extends JFrame {
 	}
 	
 	public void CalculateResult(){
-		String textToAdd = txtNumber.getText() + " in base " + txtInputBase.getText() + " is \n" + result + " in base " + txtOutputBase.getText() + "\n\n";
+		if(!IntegerHelper.isInteger(txtInputBase.getText())){
+			JOptionPane.showMessageDialog(this,"Invalid Input Base. Must be Integer");
+			return;
+		}
+		
+		if(!IntegerHelper.isInteger(txtOutputBase.getText())){
+			JOptionPane.showMessageDialog(this,"Invalid Output Base. Must be Integer");
+			return;
+		}
+		
+		String textToAdd = txtNumber.getText() + " in base " + txtInputBase.getText() + " is the following in base " + txtOutputBase.getText() + ":\n";
+		textToAdd += instance.getLogResult(txtNumber.getText(), new BigInteger(txtInputBase.getText()), "<NONE>", new BigInteger(txtOutputBase.getText())); 
+		textToAdd += "\n\n";
 		textInLog = textToAdd + textInLog;
 		textArea.setText(textInLog);
 	}
