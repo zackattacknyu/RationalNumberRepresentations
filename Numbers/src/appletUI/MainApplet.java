@@ -116,7 +116,7 @@ public class MainApplet extends JFrame {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
-		contentPane.add(lblWelcomeToRational, "4, 2, 7, 2, fill, top");
+		contentPane.add(lblWelcomeToRational, "4, 2, 7, 2, center, top");
 		contentPane.add(lblNumber, "2, 4, right, default");
 		
 		txtNumber = new JTextField();
@@ -185,25 +185,46 @@ public class MainApplet extends JFrame {
 			return;
 		}
 		
-		String textToAdd = txtNumber.getText() + " in base " + txtInputBase.getText() + " is the following in base " + txtOutputBase.getText() + ":\n";
-		textToAdd += instance.getLogResult(txtNumber.getText(), new BigInteger(txtInputBase.getText()), "<NONE>", new BigInteger(txtOutputBase.getText())); 
+		String textToAdd = instance.getLogResult(txtNumber.getText(), new BigInteger(txtInputBase.getText()), 
+				variableNamesComboBox.getSelectedItem().toString(), new BigInteger(txtOutputBase.getText())); 
 		textToAdd += "\n\n";
 		textInLog = textToAdd + textInLog;
 		textArea.setText(textInLog);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addVariable(){
 		String result = JOptionPane.showInputDialog("Specify Name of Variable");
 		int stringIndex = 0;
 		if((result != null) && (!result.isEmpty())){
-			if(StringHelper.validVariableFunctionName(result)){
+			
+			String[] buttonStrings = {"Yes","No"};
+
+			//variable name was already saved
+			if(instance.getSavedVariables().containsKey(result)){
+				
+				int option = JOptionPane.showOptionDialog(this,"Variable name in use already. Overwrite current value?","Variable name used already",
+					    JOptionPane.YES_OPTION,JOptionPane.NO_OPTION,null, buttonStrings,null);
+				if(option == JOptionPane.YES_OPTION){
+					instance.saveLastResult(result);
+				}
+				
+			}else if(StringHelper.validVariableName(result)){
+				
+				//makes the array to use as the new combo box model
 				String[] newComboBoxModel = new String[variableNamesComboBox.getModel().getSize()+1];
 				while(stringIndex < variableNamesComboBox.getModel().getSize()){
 					newComboBoxModel[stringIndex] = (String) variableNamesComboBox.getModel().getElementAt(stringIndex);
 					stringIndex++;
 				}
+				
+				//adds the new variable to the combo box model, i.e. list of values
 				newComboBoxModel[stringIndex] = result;
 				variableNamesComboBox.setModel(new DefaultComboBoxModel(newComboBoxModel));
+				
+				//add the variable to the program instance
+				instance.saveLastResult(result);
+				
 			}
 			else{
 				JOptionPane.showMessageDialog(this,"Invalid Variable Name");

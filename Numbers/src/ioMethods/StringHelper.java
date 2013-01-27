@@ -38,20 +38,6 @@ public class StringHelper {
 		return input.replaceAll(regexToIgnore, "");
 	}
 	
-	public static String concatTwoStrings(String string1, String string2){
-		return String.format(Constants.CONCAT_TWO_STRINGS_FORMATTED_STRING, string1, string2);
-	}
-	
-	public static String concatThreeStrings(String string1, String string2, String string3){
-		return String.format(Constants.CONCAT_THREE_STRINGS_FORMATTED_STRING, string1,string2,string3);
-	}
-	
-	public static String concatFiveStrings(String string1, String string2, String string3, 
-			String string4, String string5){
-		return String.format(Constants.CONCAT_FIVE_STRINGS_FORMATTED_STRING, string1, string2, string3,
-				string4, string5);
-	}
-	
 	/**
 	 * This validates variable and function names. 
 	 * They must start with a letter and only be letters and numbers
@@ -59,7 +45,7 @@ public class StringHelper {
 	 * @param variable		the variable or function name
 	 * @return		whether it follows standard syntax
 	 */
-	public static boolean validVariableFunctionName(String variable){
+	public static boolean validVariableName(String variable){
 		
 		//if variable is null, make it valid by default
 		if(variable.isEmpty()){

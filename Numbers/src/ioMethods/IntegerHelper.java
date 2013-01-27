@@ -14,17 +14,6 @@ public class IntegerHelper {
 		}
 	}
 
-	public static boolean isIntegerSetString(String input, String regexToSplitBy, BigInteger theBase){
-		String[] theDigits = input.split(regexToSplitBy);
-		
-		for(String digit : theDigits){
-			if(  !IntegerHelper.isIntegerBetween( digit, BigInteger.ZERO, theBase.subtract(BigInteger.ONE) )  ){
-				return false;
-			}
-		}
-		
-		return true;
-	}
 
 	public static boolean isIntegerGreaterThan(String input, BigInteger lowerBound){
 		return IntegerHelper.isIntegerBetween(input,lowerBound,null);
