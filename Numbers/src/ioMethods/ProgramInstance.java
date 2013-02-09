@@ -33,10 +33,12 @@ public class ProgramInstance {
 	
 	private String getLogString(DigitNumberStringExpression expression, BigInteger outputBase){
 		String numberString = expression.OutputFraction(new BigInteger("10"));
-		return String.format("%1$s is the following in base %2$d:\n%3$s", numberString,outputBase,getResultString(expression,outputBase));
+		String resultString = getResultString(expression,outputBase);
+		return String.format("%s is the following in base %s:\n%s", numberString,outputBase.toString(),resultString);
 	}
 	private String getLogString(String number, DigitNumberStringExpression expression, BigInteger inputBase, BigInteger outputBase){
-		return String.format("%1$s in base %2$d is the following in base %3$d:\n  %4$s", number,inputBase,outputBase,getResultString(expression,outputBase));
+		String resultString = getResultString(expression,outputBase);
+		return String.format("%s in base %s is the following in base %s:\n%s", number,inputBase.toString(),outputBase.toString(),resultString);
 	}
 	
 	private String getResultString(DigitNumberStringExpression expression, BigInteger outputBase){
@@ -48,7 +50,7 @@ public class ProgramInstance {
 			return fractionResult;
 		}
 		else{
-			return String.format("%1\n%2", fractionResult,decimalResult);
+			return String.format("%s\n%s", fractionResult,decimalResult);
 		}
 	}
 	
