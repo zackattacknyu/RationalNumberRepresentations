@@ -114,42 +114,53 @@ public class MainApplet extends JFrame {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
-		contentPane.add(lblWelcomeToRational, "4, 2, 7, 2, center, top");
-		contentPane.add(lblNumber, "2, 4, right, default");
+		contentPane.add(lblWelcomeToRational, "4, 2, 7, 4, center, top");
+		
+		JButton btnHelp = new JButton("Help");
+		btnHelp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				showHelpMessage();
+			}
+		});
+		contentPane.add(btnHelp, "2, 4");
+		contentPane.add(lblNumber, "2, 6, right, default");
 		
 		txtNumber = new JTextField();
-		contentPane.add(txtNumber, "4, 4, fill, default");
+		contentPane.add(txtNumber, "4, 6, fill, default");
 		
 		txtNumber.setColumns(10);
 		
 		JLabel lblOr = new JLabel("OR");
 		lblOr.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		contentPane.add(lblOr, "6, 4, center, default");
+		contentPane.add(lblOr, "6, 6, center, default");
 		
 		JLabel lblVariable = new JLabel("Variable:");
-		contentPane.add(lblVariable, "8, 4, right, default");
+		contentPane.add(lblVariable, "8, 6, right, default");
 		
 		variableNamesComboBox = new JComboBox();
 		variableNamesComboBox.setModel(new DefaultComboBoxModel(new String[] {"<NONE>"}));
 		variableNamesComboBox.setToolTipText("Available variables");
-		contentPane.add(variableNamesComboBox, "10, 4, fill, default");
+		contentPane.add(variableNamesComboBox, "10, 6, fill, default");
 		JLabel lblInputBase = new JLabel("Input Base");
-		contentPane.add(lblInputBase, "2, 6, right, default");
+		contentPane.add(lblInputBase, "2, 8, right, default");
 		txtInputBase = new JTextField();
-		contentPane.add(txtInputBase, "4, 6, fill, default");
+		contentPane.add(txtInputBase, "4, 8, fill, default");
 		txtInputBase.setColumns(10);
 		JLabel lblTo = new JLabel("to");
 		lblTo.setFont(new Font("Tahoma", Font.BOLD, 20));
-		contentPane.add(lblTo, "6, 10, center, default");
-		contentPane.add(lblOutputBase, "2, 14, right, default");
+		contentPane.add(lblTo, "6, 12, center, default");
+		contentPane.add(lblOutputBase, "2, 16, right, default");
 		txtOutputBase = new JTextField();
-		contentPane.add(txtOutputBase, "4, 14, 7, 1, fill, default");
+		contentPane.add(txtOutputBase, "4, 16, 7, 1, fill, default");
 		txtOutputBase.setColumns(10);
 		
-		JButton btnCalculate = new JButton("Calculate!");
-		contentPane.add(btnCalculate, "4, 16");
+		JButton btnCalculate = new JButton("Calculate new Representation");
+		contentPane.add(btnCalculate, "4, 18");
 		
 		btnCalculate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -158,7 +169,7 @@ public class MainApplet extends JFrame {
 			}
 		});
 		
-		JButton btnSaveToVariable = new JButton("Save to Variable");
+		JButton btnSaveToVariable = new JButton("Save Rational Number to Variable");
 		btnSaveToVariable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -166,12 +177,26 @@ public class MainApplet extends JFrame {
 				
 			}
 		});
-		contentPane.add(btnSaveToVariable, "8, 16, 3, 1");
+		contentPane.add(btnSaveToVariable, "8, 18, 3, 1");
 		JLabel lblLogOfResults = new JLabel("Log of Results");
-		contentPane.add(lblLogOfResults, "4, 20");
-		contentPane.add(textArea, "4, 22, 7, 1, fill, fill");
+		contentPane.add(lblLogOfResults, "4, 22");
+		contentPane.add(textArea, "4, 24, 7, 1, fill, fill");
 		textArea.setEditable(false);
 		
+	}
+	
+	public void showHelpMessage(){
+		String helpMessage = "The rational number can be entered in the following formats:\n" + 
+				"Integer Format: <Integer>\n" +
+				"Decimal Format: <IntegerPart>.<InitialPart>_<RepeatingPart>  OR\n" + 
+				"                <IntegerPart>.<TerminatingPart>\n" + 
+				"Fraction Format: <IntegerPart> <Numerator>/<Denominator>  OR\n" + 
+				"                 <Numerator>/<Denominator>\n\n" +
+				"The Input Base and Output Base can be between 2 and 36.\n" + 
+				"If the base is greater than 10, the numbers 11-36 are represented by A-Z\n\n" + 
+				"If a variable is specified, the rational number saved to that variable\n" + 
+				"is used as the input and its representation using the output base is computed";
+		JOptionPane.showMessageDialog(this, helpMessage);
 	}
 	
 	public void CalculateResult(){
